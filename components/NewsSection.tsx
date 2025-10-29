@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
 } from "react-native";
+import { useSettings } from "../context/SettingsContext";
 
 const SCREEN_HEIGHT = Dimensions.get("window").height;
 const NEWS_API_KEY = "d306fc72a8dd430485095116c4147aa8";
@@ -19,16 +20,33 @@ interface NewsSectionProps {
 }
 
 const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
+  const { state } = useSettings(); // 🧠 Access categories from global context
   const [news, setNews] = useState<any[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
 
   useEffect(() => {
     if (temperature) {
-      const category = getNewsCategoryByWeather(temperature, unit);
-      console.log("📰 Selected news category based on weather:", category);
-      fetchNews(category);
+      const weatherQuery = getNewsCategoryByWeather(temperature, unit);
+
+      // ✅ Gather active user categories
+      const activeCategories = Object.keys(state.categories).filter(
+        (cat) => state.categories[cat]
+      );
+      const categoryQuery = activeCategories.join(" OR ");
+
+      // ✅ Combine both into a single query
+      const finalQuery =
+        categoryQuery.length > 0
+          ? `${weatherQuery} OR ${categoryQuery}`
+          : weatherQuery;
+
+      console.log("📰 Weather Query:", weatherQuery);
+      console.log("🗞️ Active Categories:", activeCategories);
+      console.log("🔍 Final News Query:", finalQuery);
+
+      fetchNews(finalQuery);
     }
-  }, [temperature, unit]);
+  }, [temperature, unit, state.categories]); // 👈 re-run when toggled
 
   const getNewsCategoryByWeather = (temp: number, unit: string) => {
     if (unit === "metric") {
@@ -42,12 +60,14 @@ const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
     }
   };
 
-  const fetchNews = async (category: string) => {
+  const fetchNews = async (query: string) => {
     try {
       setNewsLoading(true);
       const url = `https://newsapi.org/v2/everything?q=${encodeURIComponent(
-        category
+        query
       )}&language=en&pageSize=10&sortBy=publishedAt&apiKey=${NEWS_API_KEY}`;
+
+      console.log("🗞️ Fetching from:", url);
 
       const res = await fetch(url);
       const json = await res.json();
@@ -58,8 +78,10 @@ const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
       }
 
       if (json.articles && json.articles.length > 0) {
+        console.log("✅ Loaded", json.articles.length, "articles");
         setNews(json.articles);
       } else {
+        console.log("⚠️ No articles found");
         setNews([]);
       }
     } catch (err) {
@@ -70,14 +92,13 @@ const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
   };
 
   const getNewsMood = () => {
-    const temp = unit === "metric" ? temperature : temperature;
     if (unit === "metric") {
-      if (temp < 15) return "(Serious News)";
-      if (temp > 30) return "(Alert News)";
+      if (temperature < 15) return "(Serious News)";
+      if (temperature > 30) return "(Alert News)";
       return "(Positive News)";
     } else {
-      if (temp < 59) return "(Serious News)";
-      if (temp > 86) return "(Alert News)";
+      if (temperature < 59) return "(Serious News)";
+      if (temperature > 86) return "(Alert News)";
       return "(Positive News)";
     }
   };
