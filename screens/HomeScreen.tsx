@@ -8,6 +8,7 @@ import {
   Dimensions,
 } from "react-native";
 import Geolocation from "@react-native-community/geolocation";
+import { request, PERMISSIONS, RESULTS } from 'react-native-permissions';
 import WeatherCard from "../components/WeatherCard";
 import ForecastModal from "../components/ForecastModal";
 import NewsSection from "../components/NewsSection";
