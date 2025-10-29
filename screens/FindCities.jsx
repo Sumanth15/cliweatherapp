@@ -41,7 +41,7 @@ export default function FindCities() {
       const data = await res.json();
       setResults(data);
     } catch (err) {
-      console.error("❌ City Fetch Error:", err);
+      console.error("City Fetch Error:", err);
     } finally {
       setLoading(false);
     }
@@ -51,10 +51,10 @@ export default function FindCities() {
     Geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
-        console.log("📍 Current Location:", latitude, longitude);
+        console.log(" Current Location:", latitude, longitude);
         navigation.navigate("Home", { lat: latitude, lon: longitude });
       },
-      (err) => console.error("❌ Location Error:", err),
+      (err) => console.error("Location Error:", err),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   };
@@ -65,7 +65,7 @@ export default function FindCities() {
 
   return (
     <View style={styles.container}>
-      {/* Header */}
+     
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Icon name="arrow-back" size={26} color="#fff" />
@@ -73,7 +73,7 @@ export default function FindCities() {
         <Text style={styles.headerTitle}>Find a City</Text>
       </View>
 
-      {/* Search Bar */}
+     
       <View style={styles.searchRow}>
         <TextInput
           style={styles.input}
@@ -88,13 +88,13 @@ export default function FindCities() {
         </TouchableOpacity>
       </View>
 
-      {/* Current Location Button */}
+      
       <TouchableOpacity style={styles.locationBtn} onPress={useCurrentLocation}>
         <Icon name="navigate" size={20} color="#fff" />
         <Text style={styles.locationText}>Use Current Location</Text>
       </TouchableOpacity>
 
-      {/* Recommended Cities */}
+      
       <Text style={styles.subTitle}>Recommended Cities</Text>
       <View style={styles.recommendContainer}>
         {recommendedCities.map((city, index) => (
@@ -108,7 +108,7 @@ export default function FindCities() {
         ))}
       </View>
 
-      {/* Search Results */}
+     
       {loading ? (
         <ActivityIndicator size="large" color="#00BFFF" style={{ marginTop: 20 }} />
       ) : (

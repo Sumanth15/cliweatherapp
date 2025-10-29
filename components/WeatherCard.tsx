@@ -64,7 +64,7 @@ export default function WeatherCard({
 
   return (
     <LinearGradient colors={gradientColors} className="flex-1 justify-between p-6">
-      {/* 🌆 Header Row */}
+    
       <View className="flex-row items-center justify-end mt-10">
         <TouchableOpacity
           className="p-2"
@@ -74,7 +74,7 @@ export default function WeatherCard({
         </TouchableOpacity>
       </View>
 
-      {/* 🌡️ Center Weather Info */}
+    
       <View className="items-center">
         <Text className="text-2xl font-semibold text-white">{city}</Text>
         <Text className="text-[90px] font-extralight text-white">
@@ -89,7 +89,7 @@ export default function WeatherCard({
         </View>
       </View>
 
-      {/* 📅 Bottom Forecast Button */}
+     
       <View className="items-center mb-48">
         <TouchableOpacity
           className="bg-white/30 py-3 px-10 rounded-full"

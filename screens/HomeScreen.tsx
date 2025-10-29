@@ -40,7 +40,7 @@ export default function HomeScreen() {
   const slideAnim = useRef(new Animated.Value(0)).current;
   const navigation = useNavigation<NavigationProp>();
 
-  // Get current location
+
   useEffect(() => {
     let isMounted = true;
     Geolocation.getCurrentPosition(
@@ -50,7 +50,7 @@ export default function HomeScreen() {
         setCoords({ lat: latitude, lon: longitude });
         fetchWeather(latitude, longitude);
       },
-      (error) => console.error("❌ Location Error:", error),
+      (error) => console.error(" Location Error:", error),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
     return () => {
@@ -58,7 +58,7 @@ export default function HomeScreen() {
     };
   }, []);
 
-  // Fetch weather again when units or location change
+
   useEffect(() => {
     if (coords) fetchWeather(coords.lat, coords.lon);
   }, [coords, unit]);
@@ -71,7 +71,7 @@ export default function HomeScreen() {
       const data = await res.json();
       setAqi(data?.list?.[0]?.main?.aqi ?? null);
     } catch (err) {
-      console.error("❌ AQI Fetch Error:", err);
+      console.error(" AQI Fetch Error:", err);
     }
   };
 
@@ -85,13 +85,13 @@ export default function HomeScreen() {
       setWeather(data);
       fetchAQI(lat, lon);
     } catch (e) {
-      console.error("❌ Error fetching weather:", e);
+      console.error(" Error fetching weather:", e);
     } finally {
       setLoading(false);
     }
   };
 
-  // Animated news panel
+ 
   useEffect(() => {
     const anim = Animated.timing(slideAnim, {
       toValue: showNews ? -SCREEN_HEIGHT * 0.65 : 0,
@@ -113,10 +113,10 @@ export default function HomeScreen() {
 
   return (
     <View className="flex-1 bg-black">
-      {/* 🌤️ Weather Card */}
+     
       <WeatherCard weather={weather} setShowForecast={setShowForecast} aqi={aqi} unit={unit} />
 
-      {/* 📅 Forecast Modal */}
+
       {coords && (
         <ForecastModal
           visible={showForecast}
@@ -126,7 +126,7 @@ export default function HomeScreen() {
         />
       )}
 
-      {/* 📰 News Panel */}
+  
       <Animated.View
         style={{
           transform: [{ translateY: slideAnim }],
@@ -134,7 +134,7 @@ export default function HomeScreen() {
         }}
         className="absolute bottom-[-65%] w-full bg-black/90 rounded-t-2xl p-4 shadow-lg"
       >
-        {/* Handle */}
+
         <TouchableOpacity onPress={() => setShowNews(!showNews)} className="items-center py-3 mb-2">
           <View className="w-10 h-1 bg-white/30 rounded-full mb-2" />
           <Icon

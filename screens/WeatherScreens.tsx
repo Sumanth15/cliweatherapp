@@ -15,7 +15,7 @@ import Icon from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import type { NativeStackNavigationProp } from "@react-navigation/native-stack";
 
-// ✅ Navigation types
+
 type RootStackParamList = {
   Home: undefined;
   Weather: undefined;
@@ -37,7 +37,7 @@ const WeatherScreen = () => {
 
   const navigation = useNavigation<NavigationProp>();
 
-  // 🔁 Bounce animation
+
   useEffect(() => {
     Animated.loop(
       Animated.sequence([
@@ -55,20 +55,20 @@ const WeatherScreen = () => {
     ).start();
   }, []);
 
-  // 📍 Get current location
+ 
   useEffect(() => {
     Geolocation.getCurrentPosition(
       (pos) => {
         const { latitude, longitude } = pos.coords;
         setCoords({ lat: latitude, lon: longitude });
-        console.log("📍 Location:", { latitude, longitude });
+        console.log("Location:", { latitude, longitude });
       },
-      (err) => console.error("❌ Location error:", err),
+      (err) => console.error("Location error:", err),
       { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 }
     );
   }, []);
 
-  // 🌦️ Fetch weather
+ 
   useEffect(() => {
     if (coords) fetchWeather(coords.lat, coords.lon);
   }, [coords, unit]);
@@ -80,16 +80,16 @@ const WeatherScreen = () => {
         `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&units=${unit}&appid=${WEATHER_API_KEY}`
       );
       const data = await res.json();
-      console.log("🌤️ WEATHER DATA:", JSON.stringify(data, null, 2));
+      console.log("WEATHER DATA:", JSON.stringify(data, null, 2));
       setWeather(data);
     } catch (err) {
-      console.error("❌ Weather fetch error:", err);
+      console.error(" Weather fetch error:", err);
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔄 Handle scroll indicator
+ 
   const handleScroll = (event: any) => {
     const offsetY = event.nativeEvent.contentOffset.y;
     setShowScrollIndicator(offsetY <= 50);
@@ -157,7 +157,7 @@ const WeatherScreen = () => {
                 </View>
               </View>
 
-              {/* ⬇️ Scroll Indicator */}
+      
               {showScrollIndicator && (
                 <Animated.View
                   style={{ transform: [{ translateY: bounceAnim }] }}
@@ -171,7 +171,7 @@ const WeatherScreen = () => {
                 </Animated.View>
               )}
 
-              {/* 📅 Forecast Modal */}
+              
               {coords && (
                 <ForecastModal
                   visible={modalVisible}
@@ -181,7 +181,7 @@ const WeatherScreen = () => {
                 />
               )}
 
-              {/* 📰 News Section */}
+             
               <NewsSection
                 temperature={weather.main.temp}
                 condition={weather.weather[0].main}

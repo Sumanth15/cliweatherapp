@@ -49,7 +49,7 @@ const ForecastModal: React.FC<ForecastModalProps> = ({
 
       setForecast(Object.values(grouped).slice(0, 5)); // Only next 5 days
     } catch (err) {
-      console.error("❌ Error fetching forecast:", err);
+      console.error(" Error fetching forecast:", err);
     } finally {
       setLoading(false);
     }

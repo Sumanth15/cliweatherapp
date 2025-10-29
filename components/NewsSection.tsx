@@ -20,7 +20,7 @@ interface NewsSectionProps {
 }
 
 const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
-  const { state } = useSettings(); // 🧠 Access categories from global context
+  const { state } = useSettings(); 
   const [news, setNews] = useState<any[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
 
@@ -28,25 +28,26 @@ const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
     if (temperature) {
       const weatherQuery = getNewsCategoryByWeather(temperature, unit);
 
-      // ✅ Gather active user categories
-      const activeCategories = Object.keys(state.categories).filter(
-        (cat) => state.categories[cat]
-      );
+     
+   const activeCategories = (Object.keys(state.categories) as Array<
+  keyof typeof state.categories
+>).filter((cat) => state.categories[cat]);
+
       const categoryQuery = activeCategories.join(" OR ");
 
-      // ✅ Combine both into a single query
+    
       const finalQuery =
         categoryQuery.length > 0
           ? `${weatherQuery} OR ${categoryQuery}`
           : weatherQuery;
 
-      console.log("📰 Weather Query:", weatherQuery);
-      console.log("🗞️ Active Categories:", activeCategories);
-      console.log("🔍 Final News Query:", finalQuery);
+      console.log("Weather Query:", weatherQuery);
+      console.log("Active Categories:", activeCategories);
+      console.log("Final News Query:", finalQuery);
 
       fetchNews(finalQuery);
     }
-  }, [temperature, unit, state.categories]); // 👈 re-run when toggled
+  }, [temperature, unit, state.categories]);
 
   const getNewsCategoryByWeather = (temp: number, unit: string) => {
     if (unit === "metric") {
@@ -67,25 +68,25 @@ const NewsSection: React.FC<NewsSectionProps> = ({ temperature, unit }) => {
         query
       )}&language=en&pageSize=10&sortBy=publishedAt&apiKey=${NEWS_API_KEY}`;
 
-      console.log("🗞️ Fetching from:", url);
+      console.log(" Fetching from:", url);
 
       const res = await fetch(url);
       const json = await res.json();
 
       if (json.status === "error") {
-        console.error("❌ API ERROR:", json.message);
+        console.error("API ERROR:", json.message);
         return;
       }
 
       if (json.articles && json.articles.length > 0) {
-        console.log("✅ Loaded", json.articles.length, "articles");
+        console.log("Loaded", json.articles.length, "articles");
         setNews(json.articles);
       } else {
         console.log("⚠️ No articles found");
         setNews([]);
       }
     } catch (err) {
-      console.error("❌ FETCH ERROR:", err);
+      console.error("FETCH ERROR:", err);
     } finally {
       setNewsLoading(false);
     }

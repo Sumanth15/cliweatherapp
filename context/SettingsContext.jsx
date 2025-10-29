@@ -13,7 +13,7 @@ const defaultState = {
   },
 };
 
-// Reducer to handle state changes
+
 function reducer(state, action) {
   switch (action.type) {
     case "SET_UNITS":
@@ -39,7 +39,7 @@ function reducer(state, action) {
 /** @type {import('react').Context<SettingsContextType>} */
 const SettingsContext = createContext({
   state: defaultState,
-  dispatch: () => {}, // TS now knows this function can take an argument
+  dispatch: () => {}, 
 });
 
 export const SettingsProvider = ({ children }) => {
