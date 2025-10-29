@@ -73,6 +73,15 @@ def enableProguardInReleaseBuilds = false
 def jscFlavor = 'io.github.react-native-community:jsc-android:2026004.+'
 
 android {
+
+    project.ext.react = [
+    enableHermes: false,
+    entryFile: "index.js",
+    vectoricons: [
+        fontsDir: "node_modules/react-native-vector-icons/Fonts"
+    ]
+]
+
     ndkVersion rootProject.ext.ndkVersion
     buildToolsVersion rootProject.ext.buildToolsVersion
     compileSdk rootProject.ext.compileSdkVersion
@@ -107,6 +116,18 @@ android {
     }
 }
 
+// dependencies {
+//     // The version of react-native is set by the React Native Gradle Plugin
+//     implementation("com.facebook.react:react-android")
+
+//     if (hermesEnabled.toBoolean()) {
+//         implementation("com.facebook.react:hermes-android")
+//     } else {
+//         implementation jscFlavor
+//     }
+// }
+
+
 dependencies {
     // The version of react-native is set by the React Native Gradle Plugin
     implementation("com.facebook.react:react-android")
@@ -117,3 +138,7 @@ dependencies {
         implementation jscFlavor
     }
 }
+
+// 👇 Add this line *after* dependencies
+apply from: "../../node_modules/react-native-vector-icons/fonts.gradle"
+
